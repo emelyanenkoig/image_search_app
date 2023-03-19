@@ -1,14 +1,9 @@
-import csv, pprint
-import flask
 from flask import Flask, render_template, url_for, request
 import pandas as pd
 from itertools import chain
 import random
 
 app = Flask(__name__)
-
-# Буфер недавних ссылок
-recent_images = []
 
 
 #  Получаем ссылку и параметры запроса
@@ -24,11 +19,12 @@ def get_categories():
         return False
 
 
+#  Получаем список из ссылок которые подходят под параметры запроса
 def get_list_of_links(category_list):
     df = pd.read_csv('configuration.csv', sep=';')
-    categories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6', 'cat7', 'cat8', 'cat9', 'cat10']
-    array_res = []
 
+    array_res = []
+    categories = df.columns[2:]
     for i in category_list:
         for j in categories:
             tmp_res = list(df.loc[df[j] == i].url)
@@ -37,13 +33,19 @@ def get_list_of_links(category_list):
     return list(chain(*array_res))
 
 
+#  Ф-ия уменьшения кол-ва показов
 def remove_one_show(link):
     df = pd.read_csv('configuration.csv', sep=';')
-    amount = df.loc[df.url == link, ['amount_of_shows']]
-    print(amount)
-    # df.loc[df.url == link]['amount_of_shows'] = df.loc[df.url == link]['amount_of_shows'] - 1
-    # print(df.loc[df.url == link]['amount_of_shows'])
-    # df.to_csv('configuration.csv', index=False, sep=';')
+
+    for index, row in df.iterrows():
+        if link in row['url']:
+            # Уменьшить значение колонки на 1
+            df.at[index, 'amount_of_shows'] -= 1
+            df.to_csv('configuration.csv', index=False, sep=';')
+
+
+# Буфер недавних ссылок
+recent_images = []
 
 
 @app.route("/static")
@@ -59,9 +61,10 @@ def get_data():
         # Считываем данные из конфигурационного файла
         list_of_links = get_list_of_links(category_list)
         random_link = random.choice(list_of_links)
-        print(random_link)
-        remove_one_show(random_link)
-        return random_link
+        if random_link not in recent_images:
+            print(random_link)
+            remove_one_show(random_link)
+            return random_link
 
     else:
         print("Слишком много категорий ")
