@@ -1,6 +1,9 @@
 import csv, pprint
 import flask
 from flask import Flask, render_template, url_for, request
+import pandas as pd
+from itertools import chain
+import random
 
 app = Flask(__name__)
 
@@ -21,35 +24,26 @@ def get_categories():
         return False
 
 
-# Считываем данные из конфигурационного файла
-def read_config_file():
-    csvfile = open("configuration.csv", newline='')
-    reader = csv.DictReader(csvfile, delimiter=';')
-    return reader
+def get_list_of_links(category_list):
+    df = pd.read_csv('configuration.csv', sep=';')
+    categories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6', 'cat7', 'cat8', 'cat9', 'cat10']
+    array_res = []
+
+    for i in category_list:
+        for j in categories:
+            tmp_res = list(df.loc[df[j] == i].url)
+            if tmp_res:
+                array_res.append(tmp_res)
+    return list(chain(*array_res))
 
 
-#  Ищем совпадающие категории
-def find_a_match(reader, category_list):
-    for row in reader:
-        for column in row:
-            print(recent_images)
-            if row[column] in category_list:
-                if row['url'] not in recent_images:
-                    # Добавить в буфер ссылку
-                    recent_images.append(row['url'])
-
-                    # Изменить количество показов
-                    return row['url']
-                else:
-                    continue
-    return "Совпадающих категорий не было найдено"
-
-
-def rewrite_csvfile():
-    csvfile = open("configuration.csv", newline='')
-    fieldnames = ['amount_of_shows']
-    reader = csv.DictWriter(csvfile, delimiter=';', fieldnames=fieldnames)
-    return reader
+def remove_one_show(link):
+    df = pd.read_csv('configuration.csv', sep=';')
+    amount = df.loc[df.url == link, ['amount_of_shows']]
+    print(amount)
+    # df.loc[df.url == link]['amount_of_shows'] = df.loc[df.url == link]['amount_of_shows'] - 1
+    # print(df.loc[df.url == link]['amount_of_shows'])
+    # df.to_csv('configuration.csv', index=False, sep=';')
 
 
 @app.route("/static")
@@ -63,11 +57,12 @@ def get_data():
 
     if category_list:
         # Считываем данные из конфигурационного файла
-        csvfile = read_config_file()
-        match = find_a_match(csvfile, category_list)
-        print(f' Недавние изображения: {recent_images}')
+        list_of_links = get_list_of_links(category_list)
+        random_link = random.choice(list_of_links)
+        print(random_link)
+        remove_one_show(random_link)
+        return random_link
 
-        return match
     else:
         print("Слишком много категорий ")
         return "Слишком много категорий "
@@ -75,10 +70,3 @@ def get_data():
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)
-
-# # Создаем искусственно контекст запроса
-# with app.test_request_context():
-#     print(url_for('get_data'))
-#     print(url_for('about'))
-
-# "/static/<path:image>;<int:amount_of_shows>;<path:category>;<path:category>"
