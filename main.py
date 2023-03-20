@@ -1,6 +1,5 @@
-from src.functions import get_categories, get_list_of_links, remove_one_show, get_data
-from flask import Flask, render_template
-import random
+from src.functions import get_data
+
 from config import app
 
 

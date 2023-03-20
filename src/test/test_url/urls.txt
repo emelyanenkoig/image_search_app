@@ -9,3 +9,6 @@ http://localhost:8080/static?cat1[]=auto&cat2[]=bmw&cat3[]=germany
 
 # Параметры всех строчек
 http://localhost:8080/static?cat1[]=auto&cat2[]=bmw&cat3[]=lion&cat4[]=mac&cat5[]=people
+
+# Только один параметр
+http://localhost:8080/static?cat1[]=bmw

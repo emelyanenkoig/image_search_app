@@ -1,5 +1,6 @@
 url;amount_of_shows;cat1;cat2;cat3;cat4;cat5;cat6;cat7;cat8;cat9;cat10;Unnamed: 12
-https://www.types_of_os.com/;97;os;linux;windows;mac;;;;;;;
-templates/images/cat.jpeg;99;animals;cat;lion;tiger;;;;;;;
-https://www.nations.com/;97;people;russian;chinese;;;;;;;;
-templates/images/bmw.png;97;bmw;vechile;germany;auto;;;;;;;
+http://localhost:8080/static/macos.png;25;os;linux;windows;mac;;;;;;;
+http://localhost:8080/static/cat.jpeg;76;animals;cat;lion;tiger;;;;;;;
+http://localhost:8080/static/people.png;80;people;russian;chinese;;;;;;;;
+http://localhost:8080/static/bmw.png;42;bmw;vechile;germany;auto;;;;;;;
+http://localhost:8080/static/image2.png;493;flight;airplane;;;;;;;;;
