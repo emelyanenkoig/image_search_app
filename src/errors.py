@@ -1,13 +1,7 @@
 
-class CustomError(Exception):
-    def __init__(self, *args):
-        if args:
-            self.message = args[0]
-        else:
-            self.message = None
+class TooMuchElementsError(Exception):
+    pass
 
-    def __str__(self):
-        if self.message:
-            return f'CustomError, {0}'.format(self.message)
-        else:
-            return 'CustomError has been raised'
+
+class NoCategoryError(Exception):
+    pass

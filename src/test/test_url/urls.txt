@@ -1,0 +1,11 @@
+# Несуществующие категории csv файла в запросе
+http://localhost:8080/static?cat1[]=lplpk&cat2[]=czxav&cat3[]=asdqqw&cat4[]=fddsf
+
+# Более 10 параметров в запросе
+http://localhost:8080/static?cat1[]=auto&cat2[]=bmw&cat3[]=germany&cat4[]=germany&cat5[]=germany&cat6[]=auto&cat7[]=bmw&cat8[]=germany&cat9[]=germany&cat10[]=germany&cat11[]=poland
+
+# Параметры одной строчки
+http://localhost:8080/static?cat1[]=auto&cat2[]=bmw&cat3[]=germany
+
+# Параметры всех строчек
+http://localhost:8080/static?cat1[]=auto&cat2[]=bmw&cat3[]=lion&cat4[]=mac&cat5[]=people
